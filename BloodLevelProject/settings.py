@@ -77,14 +77,34 @@ WSGI_APPLICATION = 'BloodLevelProject.wsgi.app'
 # Note: Django modules for using databases are not support in serverless
 # environments like Vercel. You can use a database over HTTP, hosted elsewhere.
 
+# POSTGRES_URL="postgres://default:6ADf7tVrLhiW@ep-damp-flower-a4ldkkt0-pooler.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require"
+# POSTGRES_PRISMA_URL="postgres://default:6ADf7tVrLhiW@ep-damp-flower-a4ldkkt0-pooler.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require&pgbouncer=true&connect_timeout=15"
+# POSTGRES_URL_NO_SSL="postgres://default:6ADf7tVrLhiW@ep-damp-flower-a4ldkkt0-pooler.us-east-1.aws.neon.tech:5432/verceldb"
+# POSTGRES_URL_NON_POOLING="postgres://default:6ADf7tVrLhiW@ep-damp-flower-a4ldkkt0.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require"
+# POSTGRES_USER="default"
+# POSTGRES_HOST="ep-damp-flower-a4ldkkt0-pooler.us-east-1.aws.neon.tech"
+# POSTGRES_PASSWORD="6ADf7tVrLhiW"
+# POSTGRES_DATABASE="verceldb"
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'BloodLevelProject',
+#         'USER': 'root',
+#         'PASSWORD': 'Pratheek@2003',
+#         'HOST': 'localhost',   
+#         'PORT': '3306',       
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'BloodLevelProject',
-        'USER': 'root',
-        'PASSWORD': 'Pratheek@2003',
-        'HOST': 'localhost',   
-        'PORT': '3306',       
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'verceldb',
+        'USER': 'default',
+        'PASSWORD': '6ADf7tVrLhiW',
+        'HOST': 'ep-damp-flower-a4ldkkt0-pooler.us-east-1.aws.neon.tech',
+        'PORT': '',          
     }
 }
 
