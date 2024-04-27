@@ -1,4 +1,10 @@
 {
+  "builds": [
+    {
+      "src": "BloodLevelProject/wsgi.py",
+      "use": "@vercel/python"
+    }
+  ],
   "routes": [
     {
       "src": "/(.*)",
