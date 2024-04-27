@@ -1,5 +1,5 @@
 """
-WSGI config for api project.
+WSGI config for BloodLevelProject project.
 
 It exposes the WSGI callable as a module-level variable named ``app``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'api.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'BloodLevelProject.settings')
 
 app = get_wsgi_application()

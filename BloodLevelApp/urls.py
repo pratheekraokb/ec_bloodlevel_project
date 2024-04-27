@@ -1,7 +1,7 @@
-# example/urls.py
+# BloodLevelApp/urls.py
 from django.urls import path
 
-from example.views import index
+from BloodLevelApp.views import index
 
 
 urlpatterns = [
