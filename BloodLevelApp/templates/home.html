@@ -1,11 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blood Level Project</title>
+    <title>Blood Levels Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        div.heading {
+            width: 100vw;
+            height: 150px;
+            background-color: black;
+            color: white;
+            color: gold;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
+
 <body>
-    <h1>Blood Level Project</h1>
+    <div class="heading">
+        <h1>Blood Level - Realtime Data</h1>
+    </div>
+    <canvas id="bloodChart" width="800" height="300"></canvas>
+ 
+    <script>
+        // Function to fetch blood levels and update chart
+        function updateBloodLevelsAndChart() {
+            // console.log("Fetching data...");
+            fetch('api/getBloodLevels/')
+                .then(response => response.json())
+                .then(data => {
+                    // Once data is received, call function to draw chart
+                    drawChart(data);
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Function to draw chart
+        function drawChart(data) {
+            const ctx = document.getElementById('bloodChart').getContext('2d');
+            const bloodCategories = Object.keys(data);
+            const percentageValues = Object.values(data);
+
+            console.log(bloodCategories, percentageValues);
+
+            // Generate an array of random colors for each data point
+            const colors = Array.from({ length: bloodCategories.length }, () => `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.5)`);
+
+            // Draw new chart
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: bloodCategories,
+                    datasets: [{
+                        label: 'Blood Levels',
+                        data: percentageValues,
+                        backgroundColor: colors,
+                        borderColor: colors.map(color => color.replace(', 0.5', ', 1')), // Set border color to be fully opaque
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+        }
+
+        function refreshPage() {
+            location.href = "";
+        }
+
+        // Update the chart every 3 seconds
+        setInterval(refreshPage, 3000);
+
+        // Initial call to update blood levels and draw chart
+        updateBloodLevelsAndChart();
+    </script>
 </body>
+
 </html>
