@@ -76,7 +76,17 @@ WSGI_APPLICATION = 'BloodLevelProject.wsgi.app'
 # Note: Django modules for using databases are not support in serverless
 # environments like Vercel. You can use a database over HTTP, hosted elsewhere.
 
-DATABASES = {}
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'BloodLevelProject',
+        'USER': 'root',
+        'PASSWORD': 'Pratheek@2003',
+        'HOST': 'localhost',   
+        'PORT': '3306',       
+    }
+}
+
 
 
 # Password validation
