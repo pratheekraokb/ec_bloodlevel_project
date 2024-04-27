@@ -9,4 +9,5 @@ urlpatterns = [
     # path('', index),
     path('', views.index, name="index"),
     path('api/getBloodLevels/', views.get_blood_levels, name='get_blood_levels'),
+    path('api/updateBloodLevels/', views.updateBloodLevels, name='updateBloodLevels'),
 ]
