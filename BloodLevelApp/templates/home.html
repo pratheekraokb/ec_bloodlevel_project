@@ -10,19 +10,75 @@
         * {
             padding: 0;
             margin: 0;
+            box-sizing: border-box;
         }
 
-        div.heading {
-            width: 100vw;
-            height: 150px;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .heading {
             background-color: black;
-            color: white;
             color: gold;
             text-align: center;
+            padding: 15px 0;
+            margin-bottom: 10px;
+        }
+
+        .chartContainer {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            padding: 0 10px;
+        }
+
+        .chart {
+            flex: 1;
+            /* Each chart takes up equal space */
+            max-width: 100px;
+            /* Limit chart width */
+            min-width: 100px;
+            /* Set minimum width for smaller screens */
+            /* max-height: 100px; */
+            margin: 0 auto;
+        }
+
+        .table-container {
             display: flex;
             justify-content: center;
-            align-items: center;
-            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .table-container table tr th {
+            padding: 20px;
+            background-color: black;
+            color: goldenrod;
+        }
+
+        .table-container table tr td {
+            padding: 15px;
+            text-align: center;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #pieChart {
+            max-height: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .chart {
+                max-width: none;
+                /* Remove the max-width restriction on larger screens */
+            }
+            
+        }
+        @media (max-width: 768px) {
+            .chartContainer{
+                display: flex;
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -31,34 +87,103 @@
     <div class="heading">
         <h1>Blood Level - Realtime Data</h1>
     </div>
-    <canvas id="bloodChart" width="800" height="300"></canvas>
- 
+    <div class="chartContainer">
+        <div class="chart">
+            <canvas id="barChart"></canvas>
+        </div>
+        <div class="chart">
+            <canvas id="pieChart"></canvas>
+        </div>
+    </div>
+    <br />
+    <div class="table-container">
+        <table border="0">
+            <tr>
+                <th>Sl No</th>
+                <th>Blood Group</th>
+                <th>Percentage (%)</th>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
+
+
     <script>
-        // Function to fetch blood levels and update chart
+
+        let updateEnabled = true; // Global variable to control automatic updates
+
         function updateBloodLevelsAndChart() {
-            // console.log("Fetching data...");
-            fetch('api/getBloodLevels/')
-                .then(response => response.json())
-                .then(data => {
-                    // Once data is received, call function to draw chart
-                    drawChart(data);
-                })
-                .catch(error => console.error('Error:', error));
+            if (updateEnabled) {
+                // console.log("Fetching data...");
+                fetch('api/getBloodLevels/')
+                    .then(response => response.json())
+                    .then(data => {
+                        // Once data is received, call function to draw chart
+                        console.log(data)
+                        drawCharts(data);
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
         }
 
-        // Function to draw chart
-        function drawChart(data) {
-            const ctx = document.getElementById('bloodChart').getContext('2d');
+        updateBloodLevelsAndChart();
+
+        setInterval(updateBloodLevelsAndChart, 6000);
+
+        
+
+
+
+        // Function to draw charts
+        function drawCharts(data) {
+            drawBarChart(data);
+            drawPieChart(data);
+            updateTable(data);
+        }
+
+        function updateTable(data) {
+            const table = document.querySelector('.table-container table');
+            // Clear existing rows except the header row
+            while (table.rows.length > 1) {
+                table.deleteRow(1);
+            }
+            // Add new rows based on the data
+            let slNo = 1;
+            for (const bloodGroup in data) {
+                if (data.hasOwnProperty(bloodGroup)) {
+                    const percentage = data[bloodGroup] + '%';
+                    const row = table.insertRow();
+                    const slNoCell = row.insertCell(0);
+                    const bloodGroupCell = row.insertCell(1);
+                    const percentageCell = row.insertCell(2);
+                    slNoCell.textContent = slNo++;
+                    bloodGroupCell.textContent = bloodGroup;
+                    percentageCell.textContent = percentage;
+                }
+            }
+        }
+
+        let barChartInstance = null;
+        let pieChartInstance = null;
+
+        function drawBarChart(data) {
+            const ctx = document.getElementById('barChart').getContext('2d');
             const bloodCategories = Object.keys(data);
             const percentageValues = Object.values(data);
-
-            console.log(bloodCategories, percentageValues);
 
             // Generate an array of random colors for each data point
             const colors = Array.from({ length: bloodCategories.length }, () => `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.5)`);
 
-            // Draw new chart
-            new Chart(ctx, {
+            // Destroy the existing chart instance if it exists
+            if (barChartInstance) {
+                barChartInstance.destroy();
+            }
+
+            barChartInstance = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: bloodCategories,
@@ -76,21 +201,61 @@
                             ticks: {
                                 beginAtZero: true
                             }
+
                         }]
                     }
                 }
             });
         }
 
-        function refreshPage() {
-            location.href = "";
+        // Function to draw pie chart
+        function drawPieChart(data) {
+            const ctx = document.getElementById('pieChart').getContext('2d');
+            const bloodCategories = Object.keys(data);
+            const percentageValues = Object.values(data);
+
+            // Generate an array of random colors for each data point
+            const colors = Array.from({ length: bloodCategories.length }, () => `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, 0.5)`);
+
+            // Destroy the existing chart instance if it exists
+            if (pieChartInstance) {
+                pieChartInstance.destroy();
+            }
+
+            pieChartInstance = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: bloodCategories,
+                    datasets: [{
+                        label: 'Blood Levels',
+                        data: percentageValues,
+                        backgroundColor: [
+
+                            'rgb(63, 81, 181)',
+                            'rgb(156, 39, 176)',
+                            'rgb(255, 87, 34)',
+                            'rgb(233, 30, 99)',
+                            'rgb(255, 152, 0)',
+                            'rgb(76, 175, 80)',
+                            'rgb(33, 150, 243)'
+
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                }
+            });
         }
 
-        // Update the chart every 3 seconds
-        setInterval(refreshPage, 3000);
-
-        // Initial call to update blood levels and draw chart
-        updateBloodLevelsAndChart();
+        // Initial call to update blood levels and draw charts
+        // updateBloodLevelsAndChart();
     </script>
 </body>
 
