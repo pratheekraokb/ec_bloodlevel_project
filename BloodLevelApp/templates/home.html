@@ -102,8 +102,10 @@
                 <th>Sl No</th>
                 <th>Blood Group</th>
                 <th>In Ml</th>
+                <th>Unit</th>
             </tr>
             <tr>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -164,7 +166,7 @@
                     slNoCell.textContent = slNo++;
                     bloodGroupCell.textContent = bloodGroup;
                     percentageCell.textContent = percentage;
-                    unit.textContent = 1;
+                    unit.textContent = percentageCell / 500;
                 }
             }
         }
