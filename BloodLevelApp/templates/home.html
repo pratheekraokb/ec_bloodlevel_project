@@ -101,7 +101,7 @@
             <tr>
                 <th>Sl No</th>
                 <th>Blood Group</th>
-                <th>Percentage (%)</th>
+                <th>In Ml</th>
             </tr>
             <tr>
                 <td></td>
@@ -155,14 +155,16 @@
             let slNo = 1;
             for (const bloodGroup in data) {
                 if (data.hasOwnProperty(bloodGroup)) {
-                    const percentage = data[bloodGroup] + '%';
+                    const percentage = data[bloodGroup];
                     const row = table.insertRow();
                     const slNoCell = row.insertCell(0);
                     const bloodGroupCell = row.insertCell(1);
                     const percentageCell = row.insertCell(2);
+                    const unit = row.insertCell(3);
                     slNoCell.textContent = slNo++;
                     bloodGroupCell.textContent = bloodGroup;
                     percentageCell.textContent = percentage;
+                    unit.textContent = 1;
                 }
             }
         }
