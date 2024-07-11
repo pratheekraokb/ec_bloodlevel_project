@@ -97,13 +97,22 @@ WSGI_APPLICATION = 'BloodLevelProject.wsgi.app'
 #     }
 # }
 
+# POSTGRES_URL="postgres://default:Txqf59KWNsCE@ep-bitter-art-a4b5lv4f-pooler.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require"
+# POSTGRES_PRISMA_URL="postgres://default:Txqf59KWNsCE@ep-bitter-art-a4b5lv4f-pooler.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require&pgbouncer=true&connect_timeout=15"
+# POSTGRES_URL_NO_SSL="postgres://default:Txqf59KWNsCE@ep-bitter-art-a4b5lv4f-pooler.us-east-1.aws.neon.tech:5432/verceldb"
+# POSTGRES_URL_NON_POOLING="postgres://default:Txqf59KWNsCE@ep-bitter-art-a4b5lv4f.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require"
+# POSTGRES_USER="default"
+# POSTGRES_HOST="ep-bitter-art-a4b5lv4f-pooler.us-east-1.aws.neon.tech"
+# POSTGRES_PASSWORD="Txqf59KWNsCE"
+# POSTGRES_DATABASE="verceldb"
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'verceldb',
         'USER': 'default',
-        'PASSWORD': '6ADf7tVrLhiW',
-        'HOST': 'ep-damp-flower-a4ldkkt0-pooler.us-east-1.aws.neon.tech',
+        'PASSWORD': 'Txqf59KWNsCE',
+        'HOST': 'ep-bitter-art-a4b5lv4f-pooler.us-east-1.aws.neon.tech',
         'PORT': '',          
     }
 }
